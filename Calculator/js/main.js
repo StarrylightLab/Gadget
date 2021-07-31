@@ -1,4 +1,3 @@
-// 1
 //设置键盘绑定监听事件
 const keyboardContainer = document.querySelector('.keyboard');
 const screen = document.querySelector('#display').value;
@@ -161,9 +160,9 @@ function operational(btn_id) {
     updateDisplay();
 }
 
-// 1获取符号、2判断运算优先级
+// 1获取符号、2判断运算优先级  opr_Judgment 方法写的逻辑有问题
 function opr_Judgment(curr_sign) { //curr_sign 当前符号
-    // opr_Judgment 方法写的逻辑有问题
+   
     // 从一级运算升到二级运算
     console.log('start')
     if ((curr_sign === 'multiply' || curr_sign === 'divide') && (sign === 'add' || sign === 'subtract')) {
