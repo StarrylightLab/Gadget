@@ -1,4 +1,4 @@
-// test GitHub   
+  
 //设置键盘绑定监听事件
 const keyboardContainer = document.querySelector('.keyboard');
 const screen = document.querySelector('#display').value;
@@ -10,9 +10,8 @@ let previousNumber = '', //上一个值
     bak_sign = '', // 备份符号
     bak_currentNumber = '', //备份当前数字；
     bak_previousNumber = '',
-    do_calculator = true;
-
-sign = '';  //记录上次运算操作符号
+    do_calculator = true,
+    sign = '';  //记录上次运算操作符号
 
 keyboardContainer.addEventListener('click', e => {
     // 捕获 Id、Class、TextContent的内容 来区分不同的button 执行相应的操作。
@@ -38,6 +37,7 @@ function updateDisplay() {
 };
 
 // 清除功能，第一次按 仅清除了当前数 ；第二次按 清除所有数字
+
 function clean() {
     if (displayNumber != '') {
         displayNumber = '';
@@ -82,7 +82,7 @@ function pressNumber(btn_number) {
     }
 
     // 把数字给当前值
-
+    // 拼接数字
     currentNumber = currentNumber + btn_number;
 
     // 如果 当前值结尾为「xxx.」
@@ -94,11 +94,10 @@ function pressNumber(btn_number) {
     } else {
         displayNumber = currentNumber;
         document.querySelector('#display').placeholder = '0';
-
         updateDisplay();
     }
-
-    console.log('curr:' + currentNumber, 'prev:' + previousNumber, 'display:' + displayNumber)
+    console.log('pressBtn:'+btn_number);
+    console.log('curr:' + currentNumber, 'prev:' + previousNumber, 'display:' + displayNumber);
 }
 
 // 操作按钮
@@ -110,7 +109,7 @@ function operational(btn_id) {
     }
     switch (btn_id) {
         case 'clean':
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             clean();
             break;
         case 'posi-and-nega':
@@ -118,7 +117,7 @@ function operational(btn_id) {
                 document.querySelector('#display').placeholder = '-0';
                 currentNumber = '-0';
                 console.log(currentNumber);
-            } else if (currentNumber === '-') {
+            } else if (currentNumber === '-0') {
                 document.querySelector('#display').placeholder = '0';
                 currentNumber = '';
             } else {
@@ -126,37 +125,37 @@ function operational(btn_id) {
                 displayNumber = currentNumber;
                 console.log('curr Type:' + currentNumber);
             }
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             break;
         case 'percent':
             currentNumber = currentNumber / 100;
             //处理精度
             // ？？？？
             displayNumber = currentNumber;
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             break;
         case 'add':
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
 
             opr_Judgment(btn_id);
 
             break;
         case 'subtract':
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             break;
         case 'multiply':
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             break;
         case 'divide':
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             break;
         case 'equal':
             opr_Judgment(btn_id);
             previousNumber = '';
-            console.log('pressed:' + btn_id);
+            console.log('pressedBtn:' + btn_id);
             break;
     }
     updateDisplay();
@@ -209,11 +208,8 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
                     currentNumber = bak_currentNumber;
                     bak_currentNumber = '';
                     previousNumber = bak_preResult;
-                    
                 }
-
             }
-
             sign = bak_sign;    //把保存的符号 给 sign
         }
     if (previousNumber !== '' && currentNumber !== '') {
@@ -223,12 +219,11 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
         } else {
             console.log('do-calu!')
             calculator(sign);
-            
+
             //bak_preResult = previousNumber;
             bak_currentNumber = currentNumber;
             // bak_currentNumber = '';
             currentNumber = '';
-
         }
     }
 
@@ -241,6 +236,82 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
     displayNumber = previousNumber;
     console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
 }
+
+// // 1获取符号、2判断运算优先级  opr_Judgment 方法写的逻辑有问题
+// function opr_Judgment(curr_sign) { //curr_sign 当前符号
+
+//     // 从一级运算升到二级运算
+//     console.log('start')
+//     if ((curr_sign === 'multiply' || curr_sign === 'divide') && (sign === 'add' || sign === 'subtract')) {
+//         // previousNumber
+//         console.log('1 to 2 !');
+
+//         if (currentNumber !== '') { // 第一次处理 最开始的时候没有 结果或者第一次需要把结果存起来
+
+//             bak_preResult = previousNumber;  //上一个值=上次计算结果 保存
+//             bak_currentNumber = currentNumber; //当前值 备份
+//             previousNumber = currentNumber;  //当前值 变成 上一个值
+//             currentNumber = '';   //当前值 清空
+//             // bak_sign 用来存储让次变化优先级前的符号
+//             bak_sign = sign; //符号保存起来
+//         }
+//         if (currentNumber === '' && bak_previousNumber !== '') {
+//             currentNumber = bak_previousNumber;
+//             console.log('reload:bak-prev:' + bak_previousNumber);
+
+//             previousNumber = bak_preResult;
+//             do_calculator = false;
+//         }
+
+//     }
+//     else
+//         // 从二级运算降到一级运算
+//         if ((curr_sign === 'add' || curr_sign === 'subtract' || curr_sign === 'equal') && (sign === 'multiply' || sign === 'divide')) {
+//             // 1+2 - 3  
+//             console.log('2 to 1 !');
+//             if (currentNumber !== '') { //第一次处理 之前二级元算还没结束要把值先算出来 保存
+//                 console.log('curr != kong');
+//                 if (bak_previousNumber === '') { //备份的当前值为空 则是第一次情况
+//                     console.log('bak-prev == kong');
+//                     calculator(sign); // 把当前二级运算 算完
+
+//                     bak_previousNumber = previousNumber; //把结果 cunqilai 
+//                     currentNumber = previousNumber; //把结果 传给 当前值
+//                     previousNumber = bak_preResult; //把保存的结果  传给 上一个值
+//                     // bak_preResult = '';
+//                 } else {
+//                     console.log('else ');
+//                     currentNumber = bak_currentNumber;
+//                     bak_currentNumber = '';
+//                     previousNumber = bak_preResult;
+//                 }
+//             }
+//             sign = bak_sign;    //把保存的符号 给 sign
+//         }
+//     if (previousNumber !== '' && currentNumber !== '') {
+//         if (do_calculator == false) {
+//             do_calculator = true;
+//             console.log('no-calc!')
+//         } else {
+//             console.log('do-calu!')
+//             calculator(sign);
+
+//             //bak_preResult = previousNumber;
+//             bak_currentNumber = currentNumber;
+//             // bak_currentNumber = '';
+//             currentNumber = '';
+//         }
+//     }
+
+//     if (currentNumber !== '') {
+//         previousNumber = currentNumber;
+//         currentNumber = '';
+//         console.log('Yes!' + previousNumber)
+//     }
+//     sign = curr_sign; //把当前符号记录下来 下次计算
+//     displayNumber = previousNumber;
+//     console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
+// }
 
 function calculator(sign) { //计算方法 等待优化 精度处理 运算规则 错误计算结果处理
     switch (sign) {
@@ -256,6 +327,7 @@ function calculator(sign) { //计算方法 等待优化 精度处理 运算规�
         case 'divide':
             previousNumber = Number(previousNumber) / Number(currentNumber);
             break;
+
     }
 
 
