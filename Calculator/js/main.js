@@ -4,6 +4,7 @@ const screen = document.querySelector('#display').value;
 let previousNumber = '', //上一个值
     currentNumber = '', //当前值
     displayNumber = '', //显示值，接收 计算结果、按钮数字
+    //尝试用来存储之前的结果 
     bak_preResult = '', // 备份值结果，用来在 各种符号之间切换需要调去原来的计算值
     bak_sign = '', // 备份符号
     bak_currentNumber = '', //备份当前数字；
