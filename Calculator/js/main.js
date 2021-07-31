@@ -11,7 +11,7 @@ let previousNumber = '', //上一个值
     bak_currentNumber = '', //备份当前数字；
     bak_previousNumber = '',
     do_calculator = true;
-    
+
 sign = '';  //记录上次运算操作符号
 
 keyboardContainer.addEventListener('click', e => {
@@ -164,7 +164,7 @@ function operational(btn_id) {
 
 // 1获取符号、2判断运算优先级  opr_Judgment 方法写的逻辑有问题
 function opr_Judgment(curr_sign) { //curr_sign 当前符号
-   
+
     // 从一级运算升到二级运算
     console.log('start')
     if ((curr_sign === 'multiply' || curr_sign === 'divide') && (sign === 'add' || sign === 'subtract')) {
@@ -182,11 +182,11 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
         }
         if (currentNumber === '' && bak_previousNumber !== '') {
             currentNumber = bak_previousNumber;
-            console.log('reload:bak-prev:'+bak_previousNumber);
+            console.log('reload:bak-prev:' + bak_previousNumber);
 
             previousNumber = bak_preResult;
             do_calculator = false;
-        } 
+        }
 
     }
     else
@@ -209,23 +209,12 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
                     currentNumber = bak_currentNumber;
                     bak_currentNumber = '';
                     previousNumber = bak_preResult;
+                    
                 }
-                
 
-
-                //【】这一段儿 else 好像永远不会被执行到 前面改的 条件给改乱了
-            } else {  
-                console.log(' 2 > 1 Else')
-                bak_previousNumber = previousNumber;  
-                currentNumber = previousNumber;    
-                previousNumber = bak_preResult; //保存的结果值 
             }
 
- 
             sign = bak_sign;    //把保存的符号 给 sign
-
-
-
         }
     if (previousNumber !== '' && currentNumber !== '') {
         if (do_calculator == false) {
@@ -234,7 +223,8 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
         } else {
             console.log('do-calu!')
             calculator(sign);
-            bak_preResult = previousNumber;
+            
+            //bak_preResult = previousNumber;
             bak_currentNumber = currentNumber;
             // bak_currentNumber = '';
             currentNumber = '';
@@ -272,4 +262,3 @@ function calculator(sign) { //计算方法 等待优化 精度处理 运算规�
 }
 
 
- 
