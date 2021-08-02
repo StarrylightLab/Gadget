@@ -154,7 +154,7 @@ function operational(btn_id) {
             break;
         case 'equal':
             opr_Judgment(btn_id);
-            previousNumber = '';
+            // previousNumber = '';
             console.log('pressedBtn:' + btn_id);
             break;
     }
@@ -249,9 +249,12 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             console.log('no-calc!')
         } else {
             console.log('do-calu!')
+            bak_preResult = previousNumber;
+            bak_currentNumber = currentNumber;
             calculator(sign);
             console.log(sign);
             // bak_previousNumber = previousNumber;
+             
             currentNumber = '';
         }
     }
