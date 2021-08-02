@@ -136,9 +136,7 @@ function operational(btn_id) {
             break;
         case 'add':
             console.log('pressedBtn:' + btn_id);
-
             opr_Judgment(btn_id);
-
             break;
         case 'subtract':
             console.log('pressedBtn:' + btn_id);
@@ -154,7 +152,15 @@ function operational(btn_id) {
             break;
         case 'equal':
             opr_Judgment(btn_id);
+            console.log(sign)
             // previousNumber = '';
+            if(currentNumber ===''){
+                console.log('equal if');
+                currentNumber = bak_currentNumber;
+                console.log(currentNumber,previousNumber)
+            }
+            // calculator(sign);
+            console.log(sign)
             console.log('pressedBtn:' + btn_id);
             break;
     }
@@ -198,6 +204,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
         if (currentNumber !== '') {
             console.log(' IF ');
             calculator(sign);
+            bak_currentNumber = currentNumber;// 疑似与equal冲突
             // console.log(previousNumber);
             bak_previousNumber = previousNumber;
             // console.log(bak_previousNumber);
@@ -215,7 +222,11 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             console.log(' ELSE ');
 
             if (bak_preResult !== '') {
-                currentNumber = bak_previousNumber;
+                if (bak_previousNumber === '') {
+                    currentNumber = bak_currentNumber;
+                } else {
+                    currentNumber = bak_previousNumber;
+                }
                 previousNumber = bak_preResult;
                 do_calculator = true;
                 sign = curr_sign;
@@ -265,7 +276,9 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
         currentNumber = '';
         console.log('Yes!' + previousNumber)
     }
-    sign = curr_sign; //把当前符号记录下来 下次计算
+    if(curr_sign!=='equal'){
+        sign = curr_sign; //把当前符号记录下来 下次计算
+    }
     displayNumber = previousNumber;
     // bak_previousNumber = displayNumber;
     console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
