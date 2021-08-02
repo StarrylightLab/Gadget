@@ -152,15 +152,15 @@ function operational(btn_id) {
             break;
         case 'equal':
             opr_Judgment(btn_id);
-            console.log(sign)
-            // previousNumber = '';
-            if(currentNumber ===''){
-                console.log('equal if');
-                currentNumber = bak_currentNumber;
-                console.log(currentNumber,previousNumber)
-            }
+            // console.log(sign)
+            // // previousNumber = '';
+            
+            //     currentNumber = bak_currentNumber;
+             
             // calculator(sign);
-            console.log(sign)
+            // currentNumber = '';
+            // bak_preResult = '';
+            // console.log(sign)
             console.log('pressedBtn:' + btn_id);
             break;
     }
@@ -229,7 +229,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
                 }
                 previousNumber = bak_preResult;
                 do_calculator = true;
-                sign = curr_sign;
+                // sign = curr_sign;
                 console.log('doing if'+' curr:'+currentNumber+' prev:'+previousNumber);
             } else {
                 // do_calculator = false;
@@ -265,8 +265,8 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             calculator(sign);
             console.log(sign);
             // bak_previousNumber = previousNumber;
-             
             currentNumber = '';
+
         }
     }
 
