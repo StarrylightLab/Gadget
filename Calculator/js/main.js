@@ -11,6 +11,7 @@ let previousNumber = '', //上一个值
     bak_currentNumber = '', //备份当前数字；
     bak_previousNumber = '',
     do_calculator = true,
+    hold = true,
     isEqual = false,
     sign = '';  //记录上次运算操作符号
 
@@ -42,14 +43,29 @@ function updateDisplay() {
 function clean() {
     if (displayNumber != '') {
         displayNumber = '';
-        currentNumber = ''
+        currentNumber = '';
+        if (hold == false || sign === '') {
+            hold = true;
+        } else {
+            rec_sign = sign;
+            document.getElementById(rec_sign).style.backgroundColor = 'white';
+            document.getElementById(rec_sign).style.color = '#FCA00B';
+        }
+
         document.querySelector('#display').placeholder = '0';
         document.getElementById('clean').textContent = 'AC';
     } else {
-        currentNumber = '';
         previousNumber = '';
+        currentNumber = '';
         displayNumber = '';
+        bak_preResult = '';
+        bak_sign = '';
+        bak_currentNumber = '';
+        bak_previousNumber = '';
+        do_calculator = true;
         sign = '';
+        document.getElementById(rec_sign).style.backgroundColor = '#FCA00B';
+        document.getElementById(rec_sign).style.color = 'white';
     }
     console.log('Cleared！' + 'prev:' + previousNumber);
 }
@@ -57,6 +73,7 @@ function clean() {
 
 //preeNumber 用来接收数字；btn_number 用来获取button标签内的值
 function pressNumber(btn_number) {
+    clearStyle();
     //有例外情况 为了准确显示 ‘xxx.’情况 临时把值传给placeholder，然后再恢复传给displayNumber
 
     // 每次输入数字 即将产生当前值，这时候clean键会为「C」；再次按下clean键会变为「AC」
@@ -89,7 +106,9 @@ function pressNumber(btn_number) {
     if (currentNumber === '0' && btn_number !== '.' && btn_number !== '') {
         currentNumber = '';
     }
-
+    if (currentNumber.length == 8) {
+        btn_number = '';
+    }
 
     // 把数字给当前值
     // 拼接数字
@@ -106,10 +125,32 @@ function pressNumber(btn_number) {
         document.querySelector('#display').placeholder = '0';
         updateDisplay();
     }
+
     console.log('pressBtn:' + btn_number);
     console.log('curr:' + currentNumber, 'prev:' + previousNumber, 'display:' + displayNumber);
 }
+function clearStyle() {
+    document.getElementById('add').style.backgroundColor = '#FCA00B';
+    document.getElementById('add').style.color = 'white';
+    document.getElementById('subtract').style.backgroundColor = '#FCA00B';
+    document.getElementById('subtract').style.color = 'white';
+    document.getElementById('multiply').style.backgroundColor = '#FCA00B';
+    document.getElementById('multiply').style.color = 'white';
+    document.getElementById('divide').style.backgroundColor = '#FCA00B';
+    document.getElementById('divide').style.color = 'white';
+}
+function holdButton(btn_id) {
 
+    clearStyle();
+
+
+    let change = btn_id;
+
+    document.getElementById(change).style.backgroundColor = 'white';
+    document.getElementById(change).style.color = '#FCA00B';
+
+
+}
 // 操作按钮
 function operational(btn_id) {
     // 把仅为‘-’的currentNumber 重置
@@ -123,16 +164,21 @@ function operational(btn_id) {
             clean();
             break;
         case 'posi-and-nega':
-            
-            if (currentNumber === '') {
+            clearStyle();
+            if (previousNumber !== '' && currentNumber === '') {
+                currentNumber = previousNumber;
+            }
+            if (currentNumber === '' || currentNumber === '0') {
                 document.querySelector('#display').placeholder = '-0';
                 currentNumber = '-0';
-                displayNumber = currentNumber;
+                // displayNumber = currentNumber;
                 console.log(currentNumber);
             } else if (currentNumber === '-0') {
                 document.querySelector('#display').placeholder = '0';
-                currentNumber = '';
+                currentNumber = '0';
+                // displayNumber = currentNumber;
             } else {
+
                 currentNumber = -1 * Number(currentNumber);
                 displayNumber = currentNumber;
                 console.log('curr Type:' + currentNumber);
@@ -141,6 +187,10 @@ function operational(btn_id) {
             isEqual = false;
             break;
         case 'percent':
+            clearStyle();
+            if (previousNumber !== '' && currentNumber === '') {
+                currentNumber = previousNumber;
+            }
             currentNumber = currentNumber / 100;
             //处理精度
             // ？？？？
@@ -149,26 +199,31 @@ function operational(btn_id) {
             isEqual = false;
             break;
         case 'add':
+            holdButton(btn_id);
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'subtract':
+            holdButton(btn_id);
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'multiply':
+            holdButton(btn_id);
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'divide':
+            holdButton(btn_id);
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'equal':
+            clearStyle();
             if (isEqual == true) {
 
                 if (bak_currentNumber !== '') {
@@ -202,6 +257,7 @@ function operational(btn_id) {
             bak_preResult = '';
             bak_sign = '';
             bak_previousNumber = '';
+            hold = false;
             console.log('pressedBtn:' + btn_id + ' curr:' + currentNumber);
             break;
     }
