@@ -1,0 +1,10 @@
+<div class="hd hd1">
+    <span class="hd-text">这爱神的箭哦阿斯顿</span>
+</div>
+<script>
+    var hdWidth = document.body.getBoundingClientRect().width;
+    var textWidth = document.getElementsByClassName('hd-text')[0].offsetWidth;
+    var scale = hdWidth / textWidth;
+
+    document.getElementsByClassName('hd-text')[0].style.fontSize = scale * 80 + '%';
+</script>
