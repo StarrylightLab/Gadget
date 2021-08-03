@@ -41,6 +41,7 @@ function updateDisplay() {
 // 清除功能，第一次按 仅清除了当前数 ；第二次按 清除所有数字
 
 function clean() {
+
     if (displayNumber != '') {
         displayNumber = '';
         currentNumber = '';
@@ -191,7 +192,8 @@ function operational(btn_id) {
             if (previousNumber !== '' && currentNumber === '') {
                 currentNumber = previousNumber;
             }
-            currentNumber = currentNumber / 100;
+            // currentNumber = currentNumber / 100;
+            currentNumber = new Decimal(currentNumber).div(new Decimal(100))
             //处理精度
             // ？？？？
             displayNumber = currentNumber;
@@ -389,19 +391,36 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
 // 计算方法
 function calculator(sign) { //计算方法 等待优化 精度处理 运算规则 错误计算结果处理
 
+
+
     switch (sign) {
         case 'add':
-            previousNumber = Number(previousNumber) + Number(currentNumber);
+            // previousNumber = Number(previousNumber) + Number(currentNumber);
+            // previousNumber = parseFloat(previousNumber.toFixed(12));
+            // 加法
+            previousNumber = new Decimal(previousNumber).add(new Decimal(currentNumber));
+            previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
+
         case 'subtract':
-            previousNumber = Number(previousNumber) - Number(currentNumber);
+            // previousNumber = Number(previousNumber) - Number(currentNumber);
+            // previousNumber = parseFloat(previousNumber.toFixed(12));
+            previousNumber = new Decimal(previousNumber).sub(new Decimal(currentNumber));
+            previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
         case 'multiply':
-            previousNumber = Number(previousNumber) * Number(currentNumber);
+            // previousNumber = Number(previousNumber) * Number(currentNumber);
+            // previousNumber = parseFloat(previousNumber.toFixed(12));
+            previousNumber = new Decimal(previousNumber).mul(new Decimal(currentNumber));
+            previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
         case 'divide':
-            previousNumber = Number(previousNumber) / Number(currentNumber);
+            // previousNumber = Number(previousNumber) / Number(currentNumber);
+            // previousNumber = parseFloat(previousNumber.toFixed(12));
+            previousNumber = new Decimal(previousNumber).div(new Decimal(currentNumber));
+            previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
+
 
     }
 
