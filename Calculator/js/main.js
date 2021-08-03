@@ -11,6 +11,7 @@ let previousNumber = '', //上一个值
     bak_currentNumber = '', //备份当前数字；
     bak_previousNumber = '',
     do_calculator = true,
+    isEqual = false,
     sign = '';  //记录上次运算操作符号
 
 keyboardContainer.addEventListener('click', e => {
@@ -126,6 +127,7 @@ function operational(btn_id) {
                 console.log('curr Type:' + currentNumber);
             }
             console.log('pressedBtn:' + btn_id);
+            isEqual = false;
             break;
         case 'percent':
             currentNumber = currentNumber / 100;
@@ -133,35 +135,61 @@ function operational(btn_id) {
             // ？？？？
             displayNumber = currentNumber;
             console.log('pressedBtn:' + btn_id);
+            isEqual = false;
             break;
         case 'add':
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
+            isEqual = false;
             break;
         case 'subtract':
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
+            isEqual = false;
             break;
         case 'multiply':
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
+            isEqual = false;
             break;
         case 'divide':
             console.log('pressedBtn:' + btn_id);
             opr_Judgment(btn_id);
+            isEqual = false;
             break;
         case 'equal':
-            opr_Judgment(btn_id);
-            console.log(sign)
-            // previousNumber = '';
-            if (currentNumber === '') {
-                console.log('equal if');
-                currentNumber = bak_currentNumber;
-                console.log(currentNumber, previousNumber)
+            if (isEqual == true) {
+                
+                if (bak_currentNumber !== '') {
+                    currentNumber = bak_currentNumber;
+                } else if (currentNumber === '') {
+                    bak_currentNumber = previousNumber;
+                    currentNumber = bak_currentNumber;
+                    console.log(currentNumber)
+                }
+                calculator(sign);
+                currentNumber = '';
+                displayNumber = previousNumber;
+
             }
-            // calculator(sign);
-            console.log(sign)
-            console.log('pressedBtn:' + btn_id);
+            else {
+                opr_Judgment(btn_id);
+                // if (bak_currentNumber !== '') {
+                //     currentNumber = bak_currentNumber;
+                // } else if (currentNumber === '') {
+                //     bak_currentNumber = previousNumber;
+                //     currentNumber = bak_currentNumber;
+                //     console.log(currentNumber)
+                // }
+                // calculator(sign);
+                // currentNumber = '';
+                // displayNumber = previousNumber;
+            }
+            isEqual = true;
+            //只有连续按下等号才会执行以下操作 默认运算上一次数字 如果没有就自运算
+
+
+            console.log('pressedBtn:' + btn_id + ' curr:' + currentNumber);
             break;
     }
     updateDisplay();
@@ -169,7 +197,7 @@ function operational(btn_id) {
 
 // 1获取符号、2判断运算优先级  opr_Judgment 方法写的逻辑有问题
 function opr_Judgment(curr_sign) { //curr_sign 当前符号
-
+    console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
     // 从一级运算升到二级运算
     console.log('start')
     if ((curr_sign === 'multiply' || curr_sign === 'divide') && (sign === 'add' || sign === 'subtract')) {
@@ -260,7 +288,12 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             console.log('no-calc!')
         } else {
             console.log('do-calu!')
-            bak_preResult = previousNumber;
+            if(curr_sign==='multiply'||curr_sign==='divide'){
+
+            }else{
+
+                bak_preResult = previousNumber;
+            }
             bak_currentNumber = currentNumber;
             calculator(sign);
             console.log(sign);
