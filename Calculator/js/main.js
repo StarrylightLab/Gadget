@@ -152,11 +152,13 @@ function operational(btn_id) {
             break;
         case 'equal':
             opr_Judgment(btn_id);
-            // console.log(sign)
-            // // previousNumber = '';
-            
-            //     currentNumber = bak_currentNumber;
-             
+            console.log(sign)
+            // previousNumber = '';
+            if (currentNumber === '') {
+                console.log('equal if');
+                currentNumber = bak_currentNumber;
+                console.log(currentNumber, previousNumber)
+            }
             // calculator(sign);
             // currentNumber = '';
             // bak_preResult = '';
@@ -230,10 +232,10 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
                 previousNumber = bak_preResult;
                 do_calculator = true;
                 // sign = curr_sign;
-                console.log('doing if'+' curr:'+currentNumber+' prev:'+previousNumber);
+                console.log('doing if' + ' curr:' + currentNumber + ' prev:' + previousNumber);
             } else {
                 // do_calculator = false;
-                console.log('doing else' + 'sign:'+sign +'curr:'+currentNumber);
+                console.log('doing else' + 'sign:' + sign + 'curr:' + currentNumber);
             }
 
             // if (bak_previousNumber === '') {
@@ -276,7 +278,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
         currentNumber = '';
         console.log('Yes!' + previousNumber)
     }
-    if(curr_sign!=='equal'){
+    if (curr_sign !== 'equal') {
         sign = curr_sign; //把当前符号记录下来 下次计算
     }
     displayNumber = previousNumber;
