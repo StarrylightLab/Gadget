@@ -61,8 +61,13 @@ function pressNumber(btn_number) {
 
     // 每次输入数字 即将产生当前值，这时候clean键会为「C」；再次按下clean键会变为「AC」
     document.getElementById('clean').textContent = 'C';
+    if (isEqual == true) {
+        previousNumber = '';
+    }
+    isEqual = false;
+
     //开头不能为「0」
-    if (btn_number === '0' && currentNumber.length == 0 || btn_number === '0' && currentNumber === '-0') {  //开头不能为0
+    if (btn_number === '0' && currentNumber === '0' || btn_number === '0' && currentNumber === '-0') {  //开头不能为0
         btn_number = ''; //清空得到的「0」
     }
 
@@ -78,9 +83,13 @@ function pressNumber(btn_number) {
         btn_number = '';
     }
 
-    if (currentNumber === '-0' && btn_number !== '.') {
+    if (currentNumber === '-0' && btn_number !== '.' && btn_number !== '') {
         currentNumber = '-';
     }
+    if (currentNumber === '0' && btn_number !== '.' && btn_number !== '') {
+        currentNumber = '';
+    }
+
 
     // 把数字给当前值
     // 拼接数字
@@ -114,9 +123,11 @@ function operational(btn_id) {
             clean();
             break;
         case 'posi-and-nega':
+            
             if (currentNumber === '') {
                 document.querySelector('#display').placeholder = '-0';
                 currentNumber = '-0';
+                displayNumber = currentNumber;
                 console.log(currentNumber);
             } else if (currentNumber === '-0') {
                 document.querySelector('#display').placeholder = '0';
@@ -159,7 +170,7 @@ function operational(btn_id) {
             break;
         case 'equal':
             if (isEqual == true) {
-                
+
                 if (bak_currentNumber !== '') {
                     currentNumber = bak_currentNumber;
                 } else if (currentNumber === '') {
@@ -187,8 +198,10 @@ function operational(btn_id) {
             }
             isEqual = true;
             //只有连续按下等号才会执行以下操作 默认运算上一次数字 如果没有就自运算
-
-
+            // previousNumber = '';
+            bak_preResult = '';
+            bak_sign = '';
+            bak_previousNumber = '';
             console.log('pressedBtn:' + btn_id + ' curr:' + currentNumber);
             break;
     }
@@ -288,9 +301,9 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             console.log('no-calc!')
         } else {
             console.log('do-calu!')
-            if(curr_sign==='multiply'||curr_sign==='divide'){
+            if (curr_sign === 'multiply' || curr_sign === 'divide') {
 
-            }else{
+            } else {
 
                 bak_preResult = previousNumber;
             }
@@ -317,82 +330,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
     console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
 }
 
-// // 1获取符号、2判断运算优先级  opr_Judgment 方法写的逻辑有问题
-// function opr_Judgment(curr_sign) { //curr_sign 当前符号
-
-//     // 从一级运算升到二级运算
-//     console.log('start')
-//     if ((curr_sign === 'multiply' || curr_sign === 'divide') && (sign === 'add' || sign === 'subtract')) {
-//         // previousNumber
-//         console.log('1 to 2 !');
-
-//         if (currentNumber !== '') { // 第一次处理 最开始的时候没有 结果或者第一次需要把结果存起来
-
-//             bak_preResult = previousNumber;  //上一个值=上次计算结果 保存
-//             bak_currentNumber = currentNumber; //当前值 备份
-//             previousNumber = currentNumber;  //当前值 变成 上一个值
-//             currentNumber = '';   //当前值 清空
-//             // bak_sign 用来存储让次变化优先级前的符号
-//             bak_sign = sign; //符号保存起来
-//         }
-//         if (currentNumber === '' && bak_previousNumber !== '') {
-//             currentNumber = bak_previousNumber;
-//             console.log('reload:bak-prev:' + bak_previousNumber);
-
-//             previousNumber = bak_preResult;
-//             do_calculator = false;
-//         }
-
-//     }
-//     else
-//         // 从二级运算降到一级运算
-//         if ((curr_sign === 'add' || curr_sign === 'subtract' || curr_sign === 'equal') && (sign === 'multiply' || sign === 'divide')) {
-//             // 1+2 - 3  
-//             console.log('2 to 1 !');
-//             if (currentNumber !== '') { //第一次处理 之前二级元算还没结束要把值先算出来 保存
-//                 console.log('curr != kong');
-//                 if (bak_previousNumber === '') { //备份的当前值为空 则是第一次情况
-//                     console.log('bak-prev == kong');
-//                     calculator(sign); // 把当前二级运算 算完
-
-//                     bak_previousNumber = previousNumber; //把结果 cunqilai 
-//                     currentNumber = previousNumber; //把结果 传给 当前值
-//                     previousNumber = bak_preResult; //把保存的结果  传给 上一个值
-//                     // bak_preResult = '';
-//                 } else {
-//                     console.log('else ');
-//                     currentNumber = bak_currentNumber;
-//                     bak_currentNumber = '';
-//                     previousNumber = bak_preResult;
-//                 }
-//             }
-//             sign = bak_sign;    //把保存的符号 给 sign
-//         }
-//     if (previousNumber !== '' && currentNumber !== '') {
-//         if (do_calculator == false) {
-//             do_calculator = true;
-//             console.log('no-calc!')
-//         } else {
-//             console.log('do-calu!')
-//             calculator(sign);
-
-//             //bak_preResult = previousNumber;
-//             bak_currentNumber = currentNumber;
-//             // bak_currentNumber = '';
-//             currentNumber = '';
-//         }
-//     }
-
-//     if (currentNumber !== '') {
-//         previousNumber = currentNumber;
-//         currentNumber = '';
-//         console.log('Yes!' + previousNumber)
-//     }
-//     sign = curr_sign; //把当前符号记录下来 下次计算
-//     displayNumber = previousNumber;
-//     console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
-// }
-
+// 计算方法
 function calculator(sign) { //计算方法 等待优化 精度处理 运算规则 错误计算结果处理
 
     switch (sign) {
