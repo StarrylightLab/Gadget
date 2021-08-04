@@ -1,3 +1,31 @@
+//屏蔽iOS Safai 浏览器的双击放大事件
+// 缩放
+// try {
+//     // 禁用双击缩放
+//     document.addEventListener("touchstart", function(event) {
+//       if (event.touches.length > 1) {
+//         event.preventDefault();
+//       }
+//     });
+//     var lastTouchEnd = 0;
+//     document.addEventListener(
+//       "touchend",
+//       function(event) {
+//         var now = new Date().getTime();
+//         if (now - lastTouchEnd <= 300) {
+//           event.preventDefault();
+//         }
+//         lastTouchEnd = now;
+//       },
+//       false
+//     );
+//     // 禁用双指手势操作
+//     document.addEventListener("gesturestart", function(event) {
+//       event.preventDefault();
+//     });
+//   } catch (error) {}
+
+
 
 //设置键盘绑定监听事件
 const keyboardContainer = document.querySelector('.keyboard');
@@ -14,6 +42,7 @@ let previousNumber = '', //上一个值
     hold = true,
     isEqual = false,
     sign = '';  //记录上次运算操作符号
+
 
 keyboardContainer.addEventListener('click', e => {
     // 捕获 Id、Class、TextContent的内容 来区分不同的button 执行相应的操作。
@@ -35,7 +64,8 @@ keyboardContainer.addEventListener('click', e => {
 })
 
 
-
+org_text = document.getElementById('display');
+org_size = window.getComputedStyle(org_text).fontSize;
 // 让屏幕上数字根据宽度 自适应变化大小
 function adaptive(disNumber) {
     // let displayWidth = document.getElementById('#display').getBoundingClientRect.width;
@@ -44,10 +74,11 @@ function adaptive(disNumber) {
     sizeNum = displayWidth / numberLength;
 
     sizeNum = sizeNum * 1.5;
-    if (sizeNum > 80) {
-        sizeNum = 80;
+    let onlyNumber = org_size.substring(0,org_size.length-2)
+    if (sizeNum > onlyNumber) {
+        sizeNum = onlyNumber;
     }
-    console.log(displayWidth, numberLength, sizeNum);
+    console.log(displayWidth, numberLength, sizeNum, org_size);
 
     return sizeNum;
 
@@ -56,16 +87,16 @@ function adaptive(disNumber) {
 
 //更新显示
 function updateDisplay() {
-    
-    if(String(displayNumber) ==='NaN'||String(displayNumber) ==='Infinity'||String(displayNumber) ==='-Infinity'){
+
+    if (String(displayNumber) === 'NaN' || String(displayNumber) === 'Infinity' || String(displayNumber) === '-Infinity') {
         console.log('error ')
-        document.querySelector('#display').value ='';
+        document.querySelector('#display').value = '';
         document.querySelector('#display').placeholder = '错误';
-    }else{
+    } else {
         document.querySelector('#display').value = displayNumber;
         console.log(displayNumber)
     }
-    let num_length= displayNumber;
+    let num_length = displayNumber;
     adaptive(num_length);
     document.querySelector('#display').style.fontSize = sizeNum + 'px';
 
@@ -127,13 +158,14 @@ function clearStyle() {
     document.getElementById('divide').style.backgroundColor = '#FCA00B';
     document.getElementById('divide').style.color = 'white';
 }
-
+ 
 //preeNumber 用来接收数字；btn_number 用来获取button标签内的值
 function pressNumber(btn_number) {
     clearStyle();
     //有例外情况 为了准确显示 ‘xxx.’情况 临时把值传给placeholder，然后再恢复传给displayNumber
 
     // 每次输入数字 即将产生当前值，这时候clean键会为「C」；再次按下clean键会变为「AC」
+    
     document.getElementById('clean').textContent = 'C';
     if (isEqual == true) {
         previousNumber = '';
@@ -163,9 +195,7 @@ function pressNumber(btn_number) {
     if (currentNumber === '0' && btn_number !== '.' && btn_number !== '') {
         currentNumber = '';
     }
-    if (currentNumber.length == 12) {
-        btn_number = '';
-    }
+     
 
     // 把数字给当前值
     // 拼接数字
@@ -209,7 +239,7 @@ function operational(btn_id) {
                 document.querySelector('#display').placeholder = '-0';
                 currentNumber = '-0';
                 // displayNumber = currentNumber;
-                console.log('two if'+currentNumber);
+                console.log('two if' + currentNumber);
             } else if (currentNumber === '-0') {
                 document.querySelector('#display').placeholder = '0';
                 currentNumber = '0';
@@ -229,7 +259,7 @@ function operational(btn_id) {
                 currentNumber = previousNumber;
             }
             // currentNumber = currentNumber / 100;
-            if(currentNumber!==''){
+            if (currentNumber !== '') {
                 currentNumber = currentNumber / 100;
                 // currentNumber = new Decimal(currentNumber).div(new Decimal(100))
                 currentNumber = parseFloat(currentNumber.toFixed(12));
@@ -303,7 +333,7 @@ function operational(btn_id) {
             console.log('pressedBtn:' + btn_id + ' curr:' + currentNumber);
             break;
     }
-    
+
     updateDisplay();
 }
 
