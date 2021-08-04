@@ -65,8 +65,7 @@ function clean() {
         bak_previousNumber = '';
         do_calculator = true;
         sign = '';
-        document.getElementById(rec_sign).style.backgroundColor = '#FCA00B';
-        document.getElementById(rec_sign).style.color = 'white';
+        clearStyle();
     }
     console.log('Cleared！' + 'prev:' + previousNumber);
 }
