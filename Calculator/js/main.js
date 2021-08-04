@@ -27,15 +27,49 @@ keyboardContainer.addEventListener('click', e => {
         // 如果是operational类元素 则表示是「操作按钮」；否则就是「数字按钮」。
         if (className === 'operational') {
             operational(btnId);
+            console.log('click')
         } else {
             pressNumber(textContent);
         }
     }
 })
 
+
+
+// 让屏幕上数字根据宽度 自适应变化大小
+function adaptive(disNumber) {
+    // let displayWidth = document.getElementById('#display').getBoundingClientRect.width;
+    let displayWidth = document.getElementById('display').offsetWidth;
+    numberLength = String(disNumber).length;
+    sizeNum = displayWidth / numberLength;
+
+    sizeNum = sizeNum * 1.5;
+    if (sizeNum > 80) {
+        sizeNum = 80;
+    }
+    console.log(displayWidth, numberLength, sizeNum);
+
+    return sizeNum;
+
+}
+
+
 //更新显示
 function updateDisplay() {
-    document.querySelector('#display').value = displayNumber;
+    
+    if(String(displayNumber) ==='NaN'||String(displayNumber) ==='Infinity'||String(displayNumber) ==='-Infinity'){
+        console.log('error ')
+        document.querySelector('#display').value ='';
+        document.querySelector('#display').placeholder = '错误';
+    }else{
+        document.querySelector('#display').value = displayNumber;
+        console.log(displayNumber)
+    }
+    let num_length= displayNumber;
+    adaptive(num_length);
+    document.querySelector('#display').style.fontSize = sizeNum + 'px';
+
+
 };
 
 // 清除功能，第一次按 仅清除了当前数 ；第二次按 清除所有数字
@@ -69,7 +103,30 @@ function clean() {
     }
     console.log('Cleared！' + 'prev:' + previousNumber);
 }
+// 操作符 加减乘除 hold 状态
+function holdButton(btn_id) {
 
+    clearStyle();
+
+
+    let change = btn_id;
+
+    document.getElementById(change).style.backgroundColor = 'white';
+    document.getElementById(change).style.color = '#FCA00B';
+
+
+}
+// 清楚 hold 状态 样式
+function clearStyle() {
+    document.getElementById('add').style.backgroundColor = '#FCA00B';
+    document.getElementById('add').style.color = 'white';
+    document.getElementById('subtract').style.backgroundColor = '#FCA00B';
+    document.getElementById('subtract').style.color = 'white';
+    document.getElementById('multiply').style.backgroundColor = '#FCA00B';
+    document.getElementById('multiply').style.color = 'white';
+    document.getElementById('divide').style.backgroundColor = '#FCA00B';
+    document.getElementById('divide').style.color = 'white';
+}
 
 //preeNumber 用来接收数字；btn_number 用来获取button标签内的值
 function pressNumber(btn_number) {
@@ -106,7 +163,7 @@ function pressNumber(btn_number) {
     if (currentNumber === '0' && btn_number !== '.' && btn_number !== '') {
         currentNumber = '';
     }
-    if (currentNumber.length == 8) {
+    if (currentNumber.length == 12) {
         btn_number = '';
     }
 
@@ -129,35 +186,14 @@ function pressNumber(btn_number) {
     console.log('pressBtn:' + btn_number);
     console.log('curr:' + currentNumber, 'prev:' + previousNumber, 'display:' + displayNumber);
 }
-function clearStyle() {
-    document.getElementById('add').style.backgroundColor = '#FCA00B';
-    document.getElementById('add').style.color = 'white';
-    document.getElementById('subtract').style.backgroundColor = '#FCA00B';
-    document.getElementById('subtract').style.color = 'white';
-    document.getElementById('multiply').style.backgroundColor = '#FCA00B';
-    document.getElementById('multiply').style.color = 'white';
-    document.getElementById('divide').style.backgroundColor = '#FCA00B';
-    document.getElementById('divide').style.color = 'white';
-}
-function holdButton(btn_id) {
 
-    clearStyle();
-
-
-    let change = btn_id;
-
-    document.getElementById(change).style.backgroundColor = 'white';
-    document.getElementById(change).style.color = '#FCA00B';
-
-
-}
 // 操作按钮
 function operational(btn_id) {
     // 把仅为‘-’的currentNumber 重置
     // 比如按了 posi-and-nega 后没有输入数字，这时候又按了操作按钮 则是视为 ‘’值
-    if (currentNumber === '-') {
-        currentNumber = '';
-    }
+    // if (currentNumber === '-') {
+    //     currentNumber = '';
+    // }
     switch (btn_id) {
         case 'clean':
             console.log('pressedBtn:' + btn_id);
@@ -167,12 +203,13 @@ function operational(btn_id) {
             clearStyle();
             if (previousNumber !== '' && currentNumber === '') {
                 currentNumber = previousNumber;
+                console.log('one if');
             }
             if (currentNumber === '' || currentNumber === '0') {
                 document.querySelector('#display').placeholder = '-0';
                 currentNumber = '-0';
                 // displayNumber = currentNumber;
-                console.log(currentNumber);
+                console.log('two if'+currentNumber);
             } else if (currentNumber === '-0') {
                 document.querySelector('#display').placeholder = '0';
                 currentNumber = '0';
@@ -192,7 +229,11 @@ function operational(btn_id) {
                 currentNumber = previousNumber;
             }
             // currentNumber = currentNumber / 100;
-            currentNumber = new Decimal(currentNumber).div(new Decimal(100))
+            if(currentNumber!==''){
+                currentNumber = currentNumber / 100;
+                // currentNumber = new Decimal(currentNumber).div(new Decimal(100))
+                currentNumber = parseFloat(currentNumber.toFixed(12));
+            }
             //处理精度
             // ？？？？
             displayNumber = currentNumber;
@@ -262,6 +303,7 @@ function operational(btn_id) {
             console.log('pressedBtn:' + btn_id + ' curr:' + currentNumber);
             break;
     }
+    
     updateDisplay();
 }
 
@@ -389,35 +431,32 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
 
 // 计算方法
 function calculator(sign) { //计算方法 等待优化 精度处理 运算规则 错误计算结果处理
-
-
-
     switch (sign) {
         case 'add':
-            // previousNumber = Number(previousNumber) + Number(currentNumber);
-            // previousNumber = parseFloat(previousNumber.toFixed(12));
+            previousNumber = Number(previousNumber) + Number(currentNumber);
+            previousNumber = parseFloat(previousNumber.toFixed(12));
             // 加法
-            previousNumber = new Decimal(previousNumber).add(new Decimal(currentNumber));
-            previousNumber = parseFloat(previousNumber.toFixed(6));
+            // previousNumber = new Decimal(previousNumber).add(new Decimal(currentNumber));
+            // previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
 
         case 'subtract':
-            // previousNumber = Number(previousNumber) - Number(currentNumber);
-            // previousNumber = parseFloat(previousNumber.toFixed(12));
-            previousNumber = new Decimal(previousNumber).sub(new Decimal(currentNumber));
-            previousNumber = parseFloat(previousNumber.toFixed(6));
+            previousNumber = Number(previousNumber) - Number(currentNumber);
+            previousNumber = parseFloat(previousNumber.toFixed(12));
+            // previousNumber = new Decimal(previousNumber).sub(new Decimal(currentNumber));
+            // previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
         case 'multiply':
-            // previousNumber = Number(previousNumber) * Number(currentNumber);
-            // previousNumber = parseFloat(previousNumber.toFixed(12));
-            previousNumber = new Decimal(previousNumber).mul(new Decimal(currentNumber));
-            previousNumber = parseFloat(previousNumber.toFixed(6));
+            previousNumber = Number(previousNumber) * Number(currentNumber);
+            previousNumber = parseFloat(previousNumber.toFixed(12));
+            // previousNumber = new Decimal(previousNumber).mul(new Decimal(currentNumber));
+            // previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
         case 'divide':
-            // previousNumber = Number(previousNumber) / Number(currentNumber);
-            // previousNumber = parseFloat(previousNumber.toFixed(12));
-            previousNumber = new Decimal(previousNumber).div(new Decimal(currentNumber));
-            previousNumber = parseFloat(previousNumber.toFixed(6));
+            previousNumber = Number(previousNumber) / Number(currentNumber);
+            previousNumber = parseFloat(previousNumber.toFixed(12));
+            // previousNumber = new Decimal(previousNumber).div(new Decimal(currentNumber));
+            // previousNumber = parseFloat(previousNumber.toFixed(6));
             break;
 
 
