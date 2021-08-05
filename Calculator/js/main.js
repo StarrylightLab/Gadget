@@ -1,32 +1,3 @@
-//屏蔽iOS Safai 浏览器的双击放大事件
-// 缩放
-// try {
-//     // 禁用双击缩放
-//     document.addEventListener("touchstart", function(event) {
-//       if (event.touches.length > 1) {
-//         event.preventDefault();
-//       }
-//     });
-//     var lastTouchEnd = 0;
-//     document.addEventListener(
-//       "touchend",
-//       function(event) {
-//         var now = new Date().getTime();
-//         if (now - lastTouchEnd <= 300) {
-//           event.preventDefault();
-//         }
-//         lastTouchEnd = now;
-//       },
-//       false
-//     );
-//     // 禁用双指手势操作
-//     document.addEventListener("gesturestart", function(event) {
-//       event.preventDefault();
-//     });
-//   } catch (error) {}
-
-
-
 //设置键盘绑定监听事件
 const keyboardContainer = document.querySelector('.keyboard');
 const screen = document.querySelector('#display').value;
@@ -56,7 +27,6 @@ keyboardContainer.addEventListener('click', e => {
         // 如果是operational类元素 则表示是「操作按钮」；否则就是「数字按钮」。
         if (className === 'operational') {
             operational(btnId);
-            console.log('click')
         } else {
             pressNumber(textContent);
         }
@@ -78,8 +48,6 @@ function adaptive(disNumber) {
     if (sizeNum > onlyNumber) {
         sizeNum = onlyNumber;
     }
-    console.log(displayWidth, numberLength, sizeNum, org_size);
-
     return sizeNum;
 
 }
@@ -89,12 +57,11 @@ function adaptive(disNumber) {
 function updateDisplay() {
 
     if (String(displayNumber) === 'NaN' || String(displayNumber) === 'Infinity' || String(displayNumber) === '-Infinity') {
-        console.log('error ')
         document.querySelector('#display').value = '';
         document.querySelector('#display').placeholder = '错误';
     } else {
         document.querySelector('#display').value = displayNumber;
-        console.log(displayNumber)
+
     }
     let num_length = displayNumber;
     adaptive(num_length);
@@ -132,7 +99,7 @@ function clean() {
         sign = '';
         clearStyle();
     }
-    console.log('Cleared！' + 'prev:' + previousNumber);
+    
 }
 // 操作符 加减乘除 hold 状态
 function holdButton(btn_id) {
@@ -205,7 +172,7 @@ function pressNumber(btn_number) {
     if (currentNumber.charAt(currentNumber.length - 1) == '.') {
         document.querySelector('#display').placeholder = String(currentNumber);
         displayNumber = ''; //  让placeholder显示出来。
-        console.log('running');
+        
         updateDisplay();
     } else {
         displayNumber = currentNumber;
@@ -213,8 +180,8 @@ function pressNumber(btn_number) {
         updateDisplay();
     }
 
-    console.log('pressBtn:' + btn_number);
-    console.log('curr:' + currentNumber, 'prev:' + previousNumber, 'display:' + displayNumber);
+    
+    
 }
 
 // 操作按钮
@@ -226,20 +193,20 @@ function operational(btn_id) {
     // }
     switch (btn_id) {
         case 'clean':
-            console.log('pressedBtn:' + btn_id);
+            
             clean();
             break;
         case 'posi-and-nega':
             clearStyle();
             if (previousNumber !== '' && currentNumber === '') {
                 currentNumber = previousNumber;
-                console.log('one if');
+                
             }
             if (currentNumber === '' || currentNumber === '0') {
                 document.querySelector('#display').placeholder = '-0';
                 currentNumber = '-0';
                 // displayNumber = currentNumber;
-                console.log('two if' + currentNumber);
+                
             } else if (currentNumber === '-0') {
                 document.querySelector('#display').placeholder = '0';
                 currentNumber = '0';
@@ -248,9 +215,9 @@ function operational(btn_id) {
 
                 currentNumber = -1 * Number(currentNumber);
                 displayNumber = currentNumber;
-                console.log('curr Type:' + currentNumber);
+                
             }
-            console.log('pressedBtn:' + btn_id);
+            
             isEqual = false;
             break;
         case 'percent':
@@ -267,30 +234,30 @@ function operational(btn_id) {
             //处理精度
             // ？？？？
             displayNumber = currentNumber;
-            console.log('pressedBtn:' + btn_id);
+            
             isEqual = false;
             break;
         case 'add':
             holdButton(btn_id);
-            console.log('pressedBtn:' + btn_id);
+            
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'subtract':
             holdButton(btn_id);
-            console.log('pressedBtn:' + btn_id);
+            
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'multiply':
             holdButton(btn_id);
-            console.log('pressedBtn:' + btn_id);
+            
             opr_Judgment(btn_id);
             isEqual = false;
             break;
         case 'divide':
             holdButton(btn_id);
-            console.log('pressedBtn:' + btn_id);
+            
             opr_Judgment(btn_id);
             isEqual = false;
             break;
@@ -330,7 +297,7 @@ function operational(btn_id) {
             bak_sign = '';
             bak_previousNumber = '';
             hold = false;
-            console.log('pressedBtn:' + btn_id + ' curr:' + currentNumber);
+            
             break;
     }
 
@@ -339,15 +306,15 @@ function operational(btn_id) {
 
 // 1获取符号、2判断运算优先级  opr_Judgment 方法写的逻辑有问题
 function opr_Judgment(curr_sign) { //curr_sign 当前符号
-    console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
+    
     // 从一级运算升到二级运算
     console.log('start')
     if ((curr_sign === 'multiply' || curr_sign === 'divide') && (sign === 'add' || sign === 'subtract')) {
         // previousNumber
-        console.log('1 to 2 !');
+        
 
         if (currentNumber !== '') {
-            console.log(' IF ');
+            
             bak_preResult = previousNumber;
             bak_currentNumber = currentNumber;
             previousNumber = currentNumber;
@@ -355,7 +322,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             bak_sign = sign;
             // do_calculator = false; 不用明确为false  因为curr 为空时 不会计算
         } else {
-            console.log(' ELSE ');
+            
             if (bak_previousNumber === '') {
                 currentNumber = bak_currentNumber;
             } else {
@@ -370,14 +337,14 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
     // 从二级运算降到一级运算
     if ((curr_sign === 'add' || curr_sign === 'subtract' || curr_sign === 'equal') && (sign === 'multiply' || sign === 'divide')) {
         // 1+2 - 3  
-        console.log('2 to 1 !');
+        
         if (currentNumber !== '') {
-            console.log(' IF ');
+            
             calculator(sign);
             bak_currentNumber = currentNumber;// 疑似与equal冲突
-            // console.log(previousNumber);
+            // 
             bak_previousNumber = previousNumber;
-            // console.log(bak_previousNumber);
+            // 
             // bak_previousNumber = currentNumber;
             currentNumber = previousNumber;
             if (bak_preResult === '') {
@@ -389,7 +356,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             }
         }
         else {
-            console.log(' ELSE ');
+            
 
             if (bak_preResult !== '') {
                 if (bak_previousNumber === '') {
@@ -400,10 +367,10 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
                 previousNumber = bak_preResult;
                 do_calculator = true;
                 // sign = curr_sign;
-                console.log('doing if' + ' curr:' + currentNumber + ' prev:' + previousNumber);
+                
             } else {
                 // do_calculator = false;
-                console.log('doing else' + 'sign:' + sign + 'curr:' + currentNumber);
+                
             }
 
             // if (bak_previousNumber === '') {
@@ -411,7 +378,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             // } else {
             //     currentNumber = bak_previousNumber;
             // }
-            // console.log(currentNumber);
+            // 
             // if (bak_preResult === '') {
             //     do_calculator = false;
             // } else {
@@ -419,7 +386,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             //     do_calculator = true;
             // }
 
-            // console.log(sign);
+            // 
         }
         // sign = bak_sign;    //把保存的符号 给 sign
     }
@@ -438,7 +405,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
             }
             bak_currentNumber = currentNumber;
             calculator(sign);
-            console.log(sign);
+            
             // bak_previousNumber = previousNumber;
             currentNumber = '';
 
@@ -456,7 +423,7 @@ function opr_Judgment(curr_sign) { //curr_sign 当前符号
     }
     displayNumber = previousNumber;
     // bak_previousNumber = displayNumber;
-    console.log('bak-preResult: ' + bak_preResult + ' bak-curr: ' + bak_currentNumber + ' bak-prev: ' + bak_previousNumber + ' prev: ' + previousNumber + ' curr: ' + currentNumber + ' display: ' + displayNumber + ' bak-sign: ' + bak_sign);
+    
 }
 
 // 计算方法
