@@ -29,7 +29,7 @@ input[type="number"] {
     margin-top: 1em;
     font-size: 2em;
     font-weight: 600;
-    color: rgb(0, 0, 0);
+    color: grey;
     line-height: 1.8em;
     text-align: center;
     vertical-align: middle;
@@ -76,7 +76,7 @@ input[type="number"] {
 }
 
 .calculator #display::placeholder {
-    color: gray;
+    color: white;
 }
 
 .keyboard {
